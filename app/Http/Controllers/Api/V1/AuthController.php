@@ -51,6 +51,13 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->firstOrFail();
 
+        if ($user->role !== 'user') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Access denied. API access is restricted to regular users only.',
+            ], 403);
+        }
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

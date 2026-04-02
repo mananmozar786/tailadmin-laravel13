@@ -22,6 +22,16 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            if (Auth::user()->role === 'user') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+
+                throw ValidationException::withMessages([
+                    'email' => ['Access denied. Web dashboard is for administrators and managers only.'],
+                ]);
+            }
+
             $request->session()->regenerate();
 
             return redirect()->intended('/');
