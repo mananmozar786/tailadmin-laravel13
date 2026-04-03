@@ -20,11 +20,16 @@ class Index extends Component
     public $userIdBeingDeleted = null;
     public $isConfirmingDeletion = false;
 
+    public $sortField = 'id';
+    public $sortDirection = 'desc';
+
     protected $queryString = [
         'search' => ['except' => ''],
         'role' => ['except' => ''],
         'status' => ['except' => ''],
         'showDeleted' => ['except' => false],
+        'sortField' => ['except' => 'id'],
+        'sortDirection' => ['except' => 'desc'],
     ];
 
     public function updatedSearch()
@@ -45,6 +50,16 @@ class Index extends Component
     public function updatedShowDeleted()
     {
         $this->resetPage();
+    }
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
     }
 
     public function confirmDeletion($id)
@@ -104,7 +119,7 @@ class Index extends Component
         }
 
         return view('livewire.admin.user.index', [
-            'users' => $query->latest()->paginate(10),
+            'users' => $query->orderBy($this->sortField, $this->sortDirection)->paginate(10),
             'roles' => Role::all(),
         ]);
     }

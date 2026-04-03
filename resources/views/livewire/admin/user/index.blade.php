@@ -70,57 +70,76 @@
             </a>
         </div>
 
-        <x-ui.table :headers="['User', 'Email', 'Role', 'Status', 'Actions']">
+        <x-ui.table>
+            <x-slot name="thead">
+                <x-ui.table-header label="User" field="first_name" :sortField="$sortField" :sortDirection="$sortDirection" />
+                <x-ui.table-header label="Email" field="email" :sortField="$sortField" :sortDirection="$sortDirection" />
+                <x-ui.table-header label="Role" />
+                <x-ui.table-header label="Status" field="status" :sortField="$sortField" :sortDirection="$sortDirection" />
+                <x-ui.table-header label="Actions" />
+            </x-slot>
+
             @forelse($users as $user)
-                <tr>
+                <tr class="transition-all hover:bg-gray-50/50 dark:hover:bg-white/[0.02]">
                     <td class="px-5 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 overflow-hidden rounded-full border border-gray-100 dark:border-gray-800">
+                            <div class="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-gray-100 dark:border-gray-800">
                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($user->first_name . ' ' . $user->last_name) }}&background=6366f1&color=fff" alt="Avatar">
                             </div>
-                            <div>
-                                <h4 class="text-sm font-medium text-gray-800 dark:text-white/90">{{ $user->first_name }} {{ $user->last_name }}</h4>
+                            <div class="flex flex-col">
+                                <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">
+                                    {{ $user->first_name }} {{ $user->last_name }}
+                                </h4>
                                 <span class="text-xs text-gray-500 dark:text-gray-400">ID: #{{ $user->id }}</span>
                             </div>
                         </div>
                     </td>
-                    <td class="px-5 py-4 text-sm text-gray-700 dark:text-white/70">
+                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
                         {{ $user->email }}
                     </td>
                     <td class="px-5 py-4">
                         <div class="flex flex-wrap gap-1">
                             @foreach($user->roles as $role)
-                                <x-ui.badge variant="primary">{{ $role->name }}</x-ui.badge>
+                                <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-500">
+                                    {{ ucwords($role->name) }}
+                                </span>
                             @endforeach
                         </div>
                     </td>
                     <td class="px-5 py-4">
-                       <x-ui.badge :variant="$user->status === 'active' ? 'success' : 'danger'">
-                           {{ ucwords($user->status) }}
-                       </x-ui.badge>
+                        @php
+                            $statusClasses = match($user->status) {
+                                'active' => 'bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-500',
+                                'inactive' => 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-500',
+                                default => 'bg-gray-50 text-gray-700 dark:bg-white/5 dark:text-white/90',
+                            };
+                        @endphp
+                        <span class="inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-medium {{ $statusClasses }}">
+                            <span class="mr-1.5 h-1.5 w-1.5 rounded-full fill-current {{ $user->status === 'active' ? 'bg-green-500' : 'bg-red-500' }}"></span>
+                            {{ ucwords($user->status) }}
+                        </span>
                     </td>
                     <td class="px-5 py-4">
                         <div class="flex items-center gap-2">
                             @if($showDeleted)
-                                <button wire:click="restore({{ $user->id }})" class="p-1 px-2.5 text-blue-500 hover:text-blue-600 dark:hover:text-blue-400" title="Restore">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                                <button wire:click="restore({{ $user->id }})" class="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-blue-500 hover:text-blue-500 dark:border-gray-800 dark:text-gray-400 dark:hover:border-blue-500" title="Restore">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4.5 w-4.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                                     </svg>
-                                    Restore
                                 </button>
-                                <button wire:click="confirmDeletion({{ $user->id }})" class="p-1.5 text-red-500 hover:text-red-600 dark:hover:text-red-400" title="Force Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                                <button wire:click="confirmDeletion({{ $user->id }})" class="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-red-500 hover:text-red-500 dark:border-gray-800 dark:text-gray-400 dark:hover:border-red-500" title="Force Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4.5 w-4.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                     </svg>
                                 </button>
                             @else
-                                <a href="{{ route('admin.users.edit', $user->id) }}" wire:navigate class="p-1.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-500" title="Edit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                                <a href="{{ route('admin.users.edit', $user->id) }}" wire:navigate class="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-blue-500 hover:text-blue-500 dark:border-gray-800 dark:text-gray-400 dark:hover:border-blue-500" title="Edit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4.5 w-4.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                     </svg>
                                 </a>
-                                <button wire:click="confirmDeletion({{ $user->id }})" class="p-1.5 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500" title="Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                                <button wire:click="confirmDeletion({{ $user->id }})" class="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition hover:border-red-500 hover:text-red-500 dark:border-gray-800 dark:text-gray-400 dark:hover:border-red-500" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4.5 w-4.5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                     </svg>
                                 </button>
