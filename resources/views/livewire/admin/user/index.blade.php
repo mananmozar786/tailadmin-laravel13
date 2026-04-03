@@ -170,7 +170,7 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <x-ui.modal name="confirm-user-deletion" :show="$isConfirmingDeletion" maxWidth="md" focusable>
+    <x-ui.modal name="confirm-user-deletion" maxWidth="md" focusable>
         <div class="p-6">
             <h2 class="text-lg font-medium text-gray-800 dark:text-white/90">
                 Are you sure you want to delete this user?

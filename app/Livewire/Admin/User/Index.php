@@ -18,7 +18,6 @@ class Index extends Component
     public $showDeleted = false;
 
     public $userIdBeingDeleted = null;
-    public $isConfirmingDeletion = false;
 
     public $sortField = 'id';
     public $sortDirection = 'desc';
@@ -65,7 +64,6 @@ class Index extends Component
     public function confirmDeletion($id)
     {
         $this->userIdBeingDeleted = $id;
-        $this->isConfirmingDeletion = true;
         $this->dispatch('open-modal', 'confirm-user-deletion');
     }
 
@@ -81,7 +79,6 @@ class Index extends Component
             session()->flash('success', 'User soft deleted.');
         }
 
-        $this->isConfirmingDeletion = false;
         $this->userIdBeingDeleted = null;
         $this->dispatch('close-modal', 'confirm-user-deletion');
     }
