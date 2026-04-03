@@ -55,14 +55,25 @@
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
                             <div class="space-y-5">
-                                <!-- Name -->
+                                <!-- First Name -->
                                 <div>
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                        Full Name<span class="text-error-500">*</span>
+                                        First Name<span class="text-error-500">*</span>
                                     </label>
-                                    <input type="text" name="name" placeholder="Enter your full name"
+                                    <input type="text" name="first_name" placeholder="Enter your first name"
                                         class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                                    @error('name')
+                                    @error('first_name')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <!-- Last Name -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Last Name<span class="text-error-500">*</span>
+                                    </label>
+                                    <input type="text" name="last_name" placeholder="Enter your last name"
+                                        class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    @error('last_name')
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
