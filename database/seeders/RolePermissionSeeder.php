@@ -29,6 +29,11 @@ class RolePermissionSeeder extends Seeder
         }
 
         // Create Roles and Assign Permissions
+        $superAdminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super admin', 'guard_name' => 'web']);
+        // Super admin generally gets all permissions via a gate in AuthServiceProvider, 
+        // but we can also assign them explicitly here.
+        $superAdminRole->givePermissionTo(\Spatie\Permission\Models\Permission::all());
+
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $adminRole->givePermissionTo(\Spatie\Permission\Models\Permission::all());
 
@@ -39,6 +44,19 @@ class RolePermissionSeeder extends Seeder
         $userRole->givePermissionTo(['view.dashboard', 'view.users']);
 
         // Create Initial Users and Assign Roles
+        $superAdmin = \App\Models\User::firstOrCreate(
+            ['email' => 'superadmin@example.com'],
+            [
+                'first_name' => 'Super',
+                'last_name' => 'Admin',
+                'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'status' => 'active',
+            ]
+        );
+        if (!$superAdmin->hasRole('super_admin')) {
+            $superAdmin->assignRole($superAdminRole);
+        }
+
         $admin = \App\Models\User::firstOrCreate(
             ['email' => 'admin@example.com'],
             [

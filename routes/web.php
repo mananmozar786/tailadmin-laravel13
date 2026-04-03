@@ -41,6 +41,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('pages.dashboard.ecommerce', ['title' => 'Dashboard']);
     })->name('dashboard');
+
+    // User Management
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/users', \App\Livewire\Admin\User\Index::class)->name('users.index');
+        Route::get('/users/create', \App\Livewire\Admin\User\Create::class)->name('users.create');
+        Route::get('/users/{user}/edit', \App\Livewire\Admin\User\Edit::class)->name('users.edit');
+    });
 });
 
 
