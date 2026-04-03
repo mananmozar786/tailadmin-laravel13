@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserForm extends Form
 {
-    public ?User $user;
+    public ?User $user = null;
 
     public $first_name = '';
     public $last_name = '';
@@ -38,7 +38,7 @@ class UserForm extends Form
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($this->user ?? null),
+                Rule::unique('users', 'email')->ignore($this->user?->id),
             ],
             'password' => $this->user ? 'nullable|min:8' : 'required|min:8',
             'status' => 'required|in:active,inactive',
