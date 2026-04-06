@@ -8,7 +8,7 @@
 <th 
     @if($field) 
         wire:click="sortBy('{{ $field }}')" 
-        class="cursor-pointer group px-5 py-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400 transition hover:text-gray-700 dark:hover:text-white"
+        class="cursor-pointer group px-5 py-4 text-xs font-medium uppercase tracking-wider transition-all duration-200 {{ $sortField === $field ? 'text-blue-600 bg-blue-50/50 dark:text-blue-400 dark:bg-blue-500/5' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-50/50 dark:hover:bg-white/[0.02]' }}"
     @else
         class="px-5 py-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400"
     @endif
