@@ -66,12 +66,12 @@
         'justify-start'">
         <a href="/">
             <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="dark:hidden" src="{{ asset('images/logo/logo.svg') }}" alt="Logo" width="150" height="40" />
+                class="dark:hidden" src="{{ asset('images/nexora-logo/logo.svg') }}" alt="Logo" width="150" height="40" />
             <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="hidden dark:block" src="{{ asset('images/logo/logo-dark.svg') }}" alt="Logo" width="150"
+                class="hidden dark:block" src="{{ asset('images/nexora-logo/logo-dark.svg') }}" alt="Logo" width="150"
                 height="40" />
             <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                src="{{ asset('images/logo/logo-icon.svg') }}" alt="Logo" width="32" height="32" />
+                src="{{ asset('images/nexora-logo/logo-icon.svg') }}" alt="Logo" width="32" height="32" />
 
         </a>
     </div>

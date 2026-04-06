@@ -63,7 +63,7 @@
                     <x-common.common-grid-shape/>
                     <div class="flex max-w-xs flex-col items-center">
                         <a href="/" class="mb-4 block">
-                            <img src="./images/logo/auth-logo.svg" alt="Logo" />
+                            <img src="./images/nexora-logo/auth-logo.svg" alt="Logo" />
                         </a>
                         <p class="text-center text-sm text-gray-400 dark:text-gray-600">
                             Reset your password to regain access to your account.

@@ -1,0 +1,22 @@
+<svg width="64" height="64" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradLeft" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#00D2FF"/>
+      <stop offset="100%" stop-color="#3A7BD5"/>
+    </linearGradient>
+    <linearGradient id="gradMid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3A7BD5"/>
+      <stop offset="100%" stop-color="#8A2387"/>
+    </linearGradient>
+    <linearGradient id="gradRight" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#8A2387"/>
+      <stop offset="100%" stop-color="#FF416C"/>
+    </linearGradient>
+  </defs>
+
+  <g stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="34" y1="38" x2="38" y2="10" stroke="url(#gradRight)"/>
+    <path d="M 16 12 Q 24 28 34 38" stroke="url(#gradMid)"/>
+    <line x1="12" y1="38" x2="16" y2="10" stroke="url(#gradLeft)"/>
+  </g>
+</svg>

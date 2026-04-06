@@ -1,0 +1,24 @@
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradLeft" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0CBEEA"/>
+      <stop offset="100%" stop-color="#2164E8"/>
+    </linearGradient>
+    <linearGradient id="gradMid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2164E8"/>
+      <stop offset="100%" stop-color="#9834EB"/>
+    </linearGradient>
+    <linearGradient id="gradRight" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#9834EB"/>
+      <stop offset="100%" stop-color="#FC5F6A"/>
+    </linearGradient>
+  </defs>
+
+  <g stroke-width="9" stroke-linecap="round">
+    <path d="M 28 31 L 32 9" stroke="url(#gradRight)"/>
+    <path d="M 14 9 L 28 31" stroke="url(#gradMid)"/>
+    <path d="M 10 31 L 14 9" stroke="url(#gradLeft)"/>
+  </g>
+  
+  <text x="48" y="28" font-family="'Satoshi', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif" font-weight="700" font-size="24" letter-spacing="-0.5" fill="#1C2434">Nexora</text>
+</svg>
