@@ -22,6 +22,14 @@ trait WithDataTable
     }
 
     /**
+     * Reset pagination when per page is updated.
+     */
+    public function updatedPerPage(): void
+    {
+        $this->resetPage();
+    }
+
+    /**
      * Toggle sort direction or change sort field.
      */
     public function sortBy(string $field): void
