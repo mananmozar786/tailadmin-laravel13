@@ -18,6 +18,15 @@ class UserForm extends Form
     public $status = 'active';
     public $roles = [];
 
+    // New location and contact fields
+    public $address = '';
+    public $city_id = '';
+    public $state_id = '';
+    public $country_id = '';
+    public $zipcode = '';
+    public $phone_country_code = '';
+    public $phone = '';
+
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -27,6 +36,15 @@ class UserForm extends Form
         $this->email = $user->email;
         $this->status = $user->status;
         $this->roles = $user->roles->pluck('name')->toArray();
+
+        // Populate location and contact fields
+        $this->address = $user->address;
+        $this->city_id = $user->city_id;
+        $this->state_id = $user->state_id;
+        $this->country_id = $user->country_id;
+        $this->zipcode = $user->zipcode;
+        $this->phone_country_code = $user->phone_country_code;
+        $this->phone = $user->phone;
     }
 
     public function rules()
@@ -43,6 +61,13 @@ class UserForm extends Form
             'password' => $this->user ? 'nullable|min:8' : 'required|min:8',
             'status' => 'required|in:active,inactive',
             'roles' => 'required|array|min:1',
+            'address' => 'nullable|string|max:500',
+            'city_id' => 'nullable|exists:cities,id',
+            'state_id' => 'nullable|exists:states,id',
+            'country_id' => 'nullable|exists:countries,id',
+            'zipcode' => 'nullable|string|max:10',
+            'phone_country_code' => 'nullable|string|max:5',
+            'phone' => 'nullable|string|max:15',
         ];
     }
 
@@ -56,6 +81,13 @@ class UserForm extends Form
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'status' => $this->status,
+            'address' => $this->address,
+            'city_id' => $this->city_id,
+            'state_id' => $this->state_id,
+            'country_id' => $this->country_id,
+            'zipcode' => $this->zipcode,
+            'phone_country_code' => $this->phone_country_code,
+            'phone' => $this->phone,
         ]);
 
         $user->assignRole($this->roles);
@@ -72,6 +104,13 @@ class UserForm extends Form
             'last_name' => $this->last_name,
             'email' => $this->email,
             'status' => $this->status,
+            'address' => $this->address,
+            'city_id' => $this->city_id,
+            'state_id' => $this->state_id,
+            'country_id' => $this->country_id,
+            'zipcode' => $this->zipcode,
+            'phone_country_code' => $this->phone_country_code,
+            'phone' => $this->phone,
         ];
 
         if ($this->password) {

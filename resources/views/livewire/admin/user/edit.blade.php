@@ -82,6 +82,90 @@
                 </x-ui.select>
             </div>
 
+            <!-- Location & Contact Section -->
+            <div class="mt-8 border-t border-gray-100 pt-6 dark:border-gray-800">
+                <h4 class="mb-4 text-sm font-medium text-gray-800 dark:text-white/90">
+                    Location & Contact Details
+                </h4>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <!-- Country -->
+                    <x-ui.select 
+                        label="Country" 
+                        wire:model.live="form.country_id" 
+                        :error="$errors->first('form.country_id')"
+                    >
+                        <option value="">Select Country</option>
+                        @foreach($countries as $country)
+                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                        @endforeach
+                    </x-ui.select>
+
+                    <!-- State -->
+                    <x-ui.select 
+                        label="State" 
+                        wire:model.live="form.state_id" 
+                        :error="$errors->first('form.state_id')"
+                        :disabled="!$form->country_id"
+                    >
+                        <option value="">Select State</option>
+                        @foreach($states as $state)
+                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                        @endforeach
+                    </x-ui.select>
+
+                    <!-- City -->
+                    <x-ui.select 
+                        label="City" 
+                        wire:model="form.city_id" 
+                        :error="$errors->first('form.city_id')"
+                        :disabled="!$form->state_id"
+                    >
+                        <option value="">Select City</option>
+                        @foreach($cities as $city)
+                            <option value="{{ $city->id }}">{{ $city->name }}</option>
+                        @endforeach
+                    </x-ui.select>
+
+                    <!-- Zipcode -->
+                    <x-ui.input 
+                        label="Zipcode" 
+                        wire:model="form.zipcode" 
+                        placeholder="12345" 
+                        :error="$errors->first('form.zipcode')" 
+                    />
+
+                    <!-- Address -->
+                    <div class="md:col-span-2">
+                        <label class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                        <textarea 
+                            wire:model="form.address" 
+                            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                            rows="3"
+                            placeholder="Street address, building, etc."
+                        ></textarea>
+                        @error('form.address')
+                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Phone Country Code -->
+                    <x-ui.input 
+                        label="Phone Country Code" 
+                        wire:model="form.phone_country_code" 
+                        placeholder="+1" 
+                        :error="$errors->first('form.phone_country_code')" 
+                    />
+
+                    <!-- Phone -->
+                    <x-ui.input 
+                        label="Phone Number" 
+                        wire:model="form.phone" 
+                        placeholder="1234567890" 
+                        :error="$errors->first('form.phone')" 
+                    />
+                </div>
+            </div>
+
             <div class="mt-8 flex items-center justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800">
                 <a href="{{ route('admin.users.index') }}" wire:navigate>
                     <x-ui.button variant="secondary">
