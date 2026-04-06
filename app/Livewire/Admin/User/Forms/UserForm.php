@@ -17,6 +17,7 @@ class UserForm extends Form
     public $password = '';
     public $status = 'active';
     public $roles = [];
+    public $gender = '';
 
     // New location and contact fields
     public $address = '';
@@ -35,6 +36,7 @@ class UserForm extends Form
         $this->last_name = $user->last_name;
         $this->email = $user->email;
         $this->status = $user->status;
+        $this->gender = $user->gender;
         $this->roles = $user->roles->pluck('name')->toArray();
 
         // Populate location and contact fields
@@ -60,6 +62,7 @@ class UserForm extends Form
             ],
             'password' => $this->user ? 'nullable|min:8' : 'required|min:8',
             'status' => 'required|in:active,inactive',
+            'gender' => 'nullable|in:male,female,other',
             'roles' => 'required|array|min:1',
             'address' => 'nullable|string|max:500',
             'city_id' => 'nullable|exists:cities,id',
@@ -81,6 +84,7 @@ class UserForm extends Form
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'status' => $this->status,
+            'gender' => $this->gender,
             'address' => $this->address,
             'city_id' => $this->city_id,
             'state_id' => $this->state_id,
@@ -104,6 +108,7 @@ class UserForm extends Form
             'last_name' => $this->last_name,
             'email' => $this->email,
             'status' => $this->status,
+            'gender' => $this->gender,
             'address' => $this->address,
             'city_id' => $this->city_id,
             'state_id' => $this->state_id,

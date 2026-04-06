@@ -31,6 +31,18 @@
                     :error="$errors->first('form.last_name')" 
                 />
 
+                <!-- Gender -->
+                <x-ui.select 
+                    label="Gender" 
+                    wire:model="form.gender" 
+                    :error="$errors->first('form.gender')"
+                >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </x-ui.select>
+
                 <!-- Email -->
                 <x-ui.input 
                     type="email" 
