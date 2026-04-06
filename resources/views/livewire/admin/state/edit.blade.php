@@ -5,7 +5,7 @@
         <form wire:submit="save" class="space-y-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Country</label>
+                    <label class="mb-2 block text-sm font-medium">Country <span class="text-red-500">*</span></label>
                     <select wire:model="form.country_id" class="w-full rounded-lg border p-2.5 text-sm dark:bg-white/5">
                         <option value="">Select Country</option>
                         @foreach($countries as $c)
@@ -15,7 +15,7 @@
                     @error('form.country_id') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Name</label>
+                    <label class="mb-2 block text-sm font-medium">Name <span class="text-red-500">*</span></label>
                     <input type="text" wire:model="form.name" class="w-full rounded-lg border p-2.5 text-sm dark:bg-white/5">
                     @error('form.name') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
@@ -25,7 +25,7 @@
                     @error('form.state_code') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Status</label>
+                    <label class="mb-2 block text-sm font-medium">Status <span class="text-red-500">*</span></label>
                     <select wire:model="form.status" class="w-full rounded-lg border p-2.5 text-sm dark:bg-white/5">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
