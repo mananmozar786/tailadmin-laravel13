@@ -15,7 +15,21 @@ class MenuHelper
             [
                 'icon' => 'users',
                 'name' => 'User Management',
-                'path' => '/admin/users',
+                'path' => '#',
+                'subItems' => [
+                    [
+                        'name' => 'Users',
+                        'path' => '/admin/users',
+                    ],
+                    [
+                        'name' => 'Roles',
+                        'path' => '/admin/roles',
+                    ],
+                    [
+                        'name' => 'Permissions',
+                        'path' => '/admin/permissions',
+                    ]
+                ]
             ],
         ];
     }

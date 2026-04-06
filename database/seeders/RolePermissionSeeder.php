@@ -21,7 +21,15 @@ class RolePermissionSeeder extends Seeder
             'view.users',
             'create.users',
             'edit.users',
-            'delete.users'
+            'delete.users',
+            'view.roles',
+            'create.roles',
+            'edit.roles',
+            'delete.roles',
+            'view.permissions',
+            'create.permissions',
+            'edit.permissions',
+            'delete.permissions',
         ];
 
         foreach ($permissions as $permission) {
@@ -30,20 +38,25 @@ class RolePermissionSeeder extends Seeder
 
         // Create Roles and Assign Permissions
         $superAdminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'super admin', 'guard_name' => 'web']);
-        // Super admin generally gets all permissions via a gate in AuthServiceProvider, 
-        // but we can also assign them explicitly here.
-        $superAdminRole->givePermissionTo(\Spatie\Permission\Models\Permission::all());
+        // Assign all permissions to super admin (though usually handled via a gate)
+        $superAdminRole->syncPermissions(\Spatie\Permission\Models\Permission::all());
 
         $adminRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-        $adminRole->givePermissionTo(\Spatie\Permission\Models\Permission::all());
+        $adminRole->syncPermissions(\Spatie\Permission\Models\Permission::all());
 
         $managerRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'manager', 'guard_name' => 'web']);
-        $managerRole->givePermissionTo(['view.dashboard', 'view.users', 'create.users', 'edit.users']);
+        $managerRole->syncPermissions(['view.dashboard', 'view.users', 'create.users', 'edit.users']);
 
         $userRole = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
-        $userRole->givePermissionTo(['view.dashboard', 'view.users']);
+        $userRole->syncPermissions(['view.dashboard', 'view.users']);
 
-        // Create Initial Users and Assign Roles
+        // Assign Super Admin to the first user
+        $firstUser = \App\Models\User::orderBy('id', 'asc')->first();
+        if ($firstUser) {
+            $firstUser->assignRole($superAdminRole);
+        }
+
+        // Create Initial Users and Assign Roles (Optional if they already exist, but good for demo)
         $superAdmin = \App\Models\User::firstOrCreate(
             ['email' => 'superadmin@example.com'],
             [
@@ -53,9 +66,7 @@ class RolePermissionSeeder extends Seeder
                 'status' => 'active',
             ]
         );
-        if (!$superAdmin->hasRole('super_admin')) {
-            $superAdmin->assignRole($superAdminRole);
-        }
+        $superAdmin->assignRole($superAdminRole);
 
         $admin = \App\Models\User::firstOrCreate(
             ['email' => 'admin@example.com'],
@@ -63,22 +74,9 @@ class RolePermissionSeeder extends Seeder
                 'first_name' => 'Admin',
                 'last_name' => 'User',
                 'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                'status' => 'active',
             ]
         );
-        if (!$admin->hasRole('admin')) {
-            $admin->assignRole($adminRole);
-        }
-
-        $manager = \App\Models\User::firstOrCreate(
-            ['email' => 'manager@example.com'],
-            [
-                'first_name' => 'Manager',
-                'last_name' => 'User',
-                'password' => \Illuminate\Support\Facades\Hash::make('password'),
-            ]
-        );
-        if (!$manager->hasRole('manager')) {
-            $manager->assignRole($managerRole);
-        }
+        $admin->assignRole($adminRole);
     }
 }

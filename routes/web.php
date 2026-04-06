@@ -47,6 +47,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', \App\Livewire\Admin\User\Index::class)->name('users.index');
         Route::get('/users/create', \App\Livewire\Admin\User\Create::class)->name('users.create');
         Route::get('/users/{user}/edit', \App\Livewire\Admin\User\Edit::class)->name('users.edit');
+
+        // Roles
+        Route::get('/roles', \App\Livewire\Admin\Role\Index::class)->name('roles.index');
+        Route::get('/roles/create', \App\Livewire\Admin\Role\Create::class)->name('roles.create');
+        Route::get('/roles/{role}/edit', \App\Livewire\Admin\Role\Edit::class)->name('roles.edit');
+
+        // Permissions
+        Route::get('/permissions', \App\Livewire\Admin\Permission\Index::class)->name('permissions.index');
+        Route::get('/permissions/create', \App\Livewire\Admin\Permission\Create::class)->name('permissions.create');
+        Route::get('/permissions/{permission}/edit', \App\Livewire\Admin\Permission\Edit::class)->name('permissions.edit');
     });
 });
 
