@@ -57,6 +57,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/permissions', \App\Livewire\Admin\Permission\Index::class)->name('permissions.index');
         Route::get('/permissions/create', \App\Livewire\Admin\Permission\Create::class)->name('permissions.create');
         Route::get('/permissions/{permission}/edit', \App\Livewire\Admin\Permission\Edit::class)->name('permissions.edit');
+
+        // Location Management
+        // Countries
+        Route::get('/countries', \App\Livewire\Admin\Country\Index::class)->name('countries.index');
+        Route::get('/countries/create', \App\Livewire\Admin\Country\Create::class)->name('countries.create');
+        Route::get('/countries/{country}/edit', \App\Livewire\Admin\Country\Edit::class)->name('countries.edit');
+
+        // States
+        Route::get('/states', \App\Livewire\Admin\State\Index::class)->name('states.index');
+        Route::get('/states/create', \App\Livewire\Admin\State\Create::class)->name('states.create');
+        Route::get('/states/{state}/edit', \App\Livewire\Admin\State\Edit::class)->name('states.edit');
+
+        // Cities
+        Route::get('/cities', \App\Livewire\Admin\City\Index::class)->name('cities.index');
+        Route::get('/cities/create', \App\Livewire\Admin\City\Create::class)->name('cities.create');
+        Route::get('/cities/{city}/edit', \App\Livewire\Admin\City\Edit::class)->name('cities.edit');
     });
 });
 
