@@ -73,6 +73,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cities', \App\Livewire\Admin\City\Index::class)->name('cities.index');
         Route::get('/cities/create', \App\Livewire\Admin\City\Create::class)->name('cities.create');
         Route::get('/cities/{city}/edit', \App\Livewire\Admin\City\Edit::class)->name('cities.edit');
+
+        // Categories
+        Route::get('/categories', \App\Livewire\Admin\Category\Index::class)->name('categories.index');
+        Route::get('/categories/create', \App\Livewire\Admin\Category\Create::class)->name('categories.create');
+        Route::get('/categories/{category}/edit', \App\Livewire\Admin\Category\Edit::class)->name('categories.edit');
     });
 });
 
