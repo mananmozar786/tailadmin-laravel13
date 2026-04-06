@@ -17,19 +17,22 @@
             this.initializeActiveMenus();
         },
         initializeActiveMenus() {
-            const currentPath = '{{ $currentPath }}';
+            const currentPath = '/' + '{{ ltrim($currentPath, '/') }}';
 
             @foreach ($menuGroups as $groupIndex => $menuGroup)
                 @foreach ($menuGroup['items'] as $itemIndex => $item)
                     @if (isset($item['subItems']))
-                        // Check if any submenu item matches current path
+                        // Check if any submenu item matches current path or is a parent of current path
                         @foreach ($item['subItems'] as $subItem)
-                            if (currentPath === '{{ ltrim($subItem['path'], '/') }}' ||
-                                window.location.pathname === '{{ $subItem['path'] }}') {
-                                this.openSubmenus['{{ $groupIndex }}-{{ $itemIndex }}'] = true;
-                            } @endforeach
-            @endif
-            @endforeach
+                            {
+                                const itemPath = '{{ $subItem['path'] }}';
+                                if (currentPath === itemPath || currentPath.startsWith(itemPath + '/')) {
+                                    this.openSubmenus['{{ $groupIndex }}-{{ $itemIndex }}'] = true;
+                                }
+                            }
+                        @endforeach
+                    @endif
+                @endforeach
             @endforeach
         },
         toggleSubmenu(groupIndex, itemIndex) {
@@ -48,7 +51,9 @@
             return this.openSubmenus[key] || false;
         },
         isActive(path) {
-            return window.location.pathname === path || '{{ $currentPath }}' === path.replace(/^\//, '');
+            const current = window.location.pathname;
+            if (path === '/') return current === '/';
+            return current === path || current.startsWith(path + '/');
         }
     }"
     :class="{
