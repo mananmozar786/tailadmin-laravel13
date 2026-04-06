@@ -277,13 +277,12 @@
             >
                 <div class="flex items-center justify-between">
                     <div>
-                        <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">Show Deleted</h4>
-                        <p class="text-xs text-gray-500">Include soft-deleted users in results</p>
+                        <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">Trash Only</h4>
+                        <p class="text-xs text-gray-500">Show only deleted users</p>
                     </div>
                     <button 
                         type="button"
-                        x-on:click="localShowDeleted = !localShowDeleted"
-                        @click="$dispatch('toggle-show-deleted')"
+                        x-on:click="localShowDeleted = !localShowDeleted; $nextTick(() => { $refs.showDeletedInput.dispatchEvent(new Event('change', { bubbles: true })) })"
                         class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
                         :class="localShowDeleted ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'"
                     >
@@ -292,7 +291,7 @@
                             :class="localShowDeleted ? 'translate-x-5' : 'translate-x-0'"
                         ></span>
                     </button>
-                    <input type="checkbox" wire:model="showDeleted" x-model="localShowDeleted" class="hidden">
+                    <input type="checkbox" wire:model="showDeleted" x-model="localShowDeleted" x-ref="showDeletedInput" class="hidden">
                 </div>
             </div>
         </div>
