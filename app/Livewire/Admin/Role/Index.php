@@ -11,11 +11,27 @@ class Index extends Component
 {
     use WithDataTable;
 
+    public string $guard = '';
     public $roleIdBeingDeleted = null;
 
     protected function queryString(): array
     {
-        return $this->queryStringWithDataTable();
+        return array_merge($this->queryStringWithDataTable(), [
+            'guard' => ['except' => ''],
+        ]);
+    }
+
+    public function updatedGuard(): void
+    {
+        $this->resetPage();
+    }
+
+    /**
+     * Reset custom filters for this component.
+     */
+    public function resetCustomFilters(): void
+    {
+        $this->reset(['guard']);
     }
 
     public function confirmDeletion($id): void
@@ -48,6 +64,7 @@ class Index extends Component
                 $q->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('guard_name', 'like', '%' . $this->search . '%');
             })
+            ->when($this->guard, fn($q) => $q->where('guard_name', $this->guard))
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 

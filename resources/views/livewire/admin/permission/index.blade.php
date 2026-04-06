@@ -38,6 +38,22 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <!-- Filters Button -->
+                <button 
+                    x-on:click="$dispatch('open-drawer', 'permission-filters')"
+                    class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-300 active:scale-95 dark:border-gray-700 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                    </svg>
+                    Filters
+                    @if($guard || $perPage != 10)
+                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
+                            {{ ($guard ? 1 : 0) + ($perPage != 10 ? 1 : 0) }}
+                        </span>
+                    @endif
+                </button>
+
                 <a href="{{ route('admin.permissions.create') }}" wire:navigate>
                     <x-ui.button class="rounded-xl px-5 py-3 shadow-lg shadow-blue-500/20">
                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-2 h-5 w-5">
@@ -122,4 +138,100 @@
             </div>
         </div>
     </x-ui.modal>
+
+    <!-- Filter Drawer -->
+    <x-ui.drawer name="permission-filters" title="Permission Filters">
+        <div class="space-y-6">
+            <!-- Choose Field (Sorting) -->
+            <div>
+                <label for="filterField" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Sort By Field
+                </label>
+                <select 
+                    wire:model="sortField" 
+                    id="filterField" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="id">ID (Default)</option>
+                    <option value="name">Name</option>
+                    <option value="guard_name">Guard</option>
+                </select>
+            </div>
+
+            <!-- Choose Order (Sorting) -->
+            <div>
+                <label for="filterFieldOrder" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Sort Direction
+                </label>
+                <select 
+                    wire:model="sortDirection" 
+                    id="filterFieldOrder" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+
+            <!-- Records Per Page -->
+            <div>
+                <label for="perPage" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Records Per Page
+                </label>
+                <select 
+                    wire:model="perPage" 
+                    id="perPage" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+
+            <!-- Guard Filter -->
+            <div>
+                <label for="guard_filter" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Guard
+                </label>
+                <select 
+                    wire:model="guard" 
+                    id="guard_filter" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="">All</option>
+                    <option value="web">Web</option>
+                    <option value="api">API</option>
+                </select>
+            </div>
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex items-center justify-between gap-3">
+                <button 
+                    wire:click="resetFilters" 
+                    x-on:click="close()"
+                    class="w-full rounded-xl border border-gray-200 bg-white py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    Reset All
+                </button>
+                <button 
+                    wire:click="$refresh"
+                    wire:loading.attr="disabled"
+                    x-on:click="close()" 
+                    class="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30 disabled:opacity-50"
+                >
+                    <span wire:loading.remove>Apply Filters</span>
+                    <span wire:loading wire:target="$refresh" class="flex items-center justify-center gap-2">
+                        <svg class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Applying...
+                    </span>
+                </button>
+            </div>
+        </x-slot>
+    </x-ui.drawer>
 </div>
