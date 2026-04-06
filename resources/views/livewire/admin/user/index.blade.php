@@ -13,61 +13,53 @@
     @endif
 
     <!-- Main Card -->
-    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div id="user-table-card" class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- Table Header / Filters -->
-        <div class="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between lg:p-6">
-            <div class="flex flex-wrap items-center gap-3">
+        <div class="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between lg:p-6 border-b border-gray-100 dark:border-gray-800/50">
+            <div class="flex-1 max-w-lg">
                 <!-- Search -->
-                <div class="relative w-full max-w-[300px]">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                <div class="relative w-full">
+                    <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                         </svg>
                     </span>
                     <input 
-                        wire:model.live.debounce.300ms="search" 
+                        wire:model.live.debounce.500ms="search" 
                         type="text" 
-                        placeholder="Search users..." 
-                        class="pl-10 w-full rounded-lg border border-gray-300 py-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-gray-700 dark:bg-white/5 dark:text-white/90 dark:focus:border-blue-500 dark:focus:ring-blue-500/10"
+                        placeholder="Search by name or email..." 
+                        class="pl-11 w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 text-sm transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-white/5 dark:text-white/90 dark:focus:border-blue-500"
                     />
                 </div>
-
-                <!-- Role Filter -->
-                <select wire:model.live="role" class="rounded-lg border border-gray-300 py-2.5 px-4 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-gray-700 dark:bg-[#1C2434] dark:text-white/90">
-                    <option value="">All Roles</option>
-                    @foreach($roles as $role)
-                        <option value="{{ $role->name }}">{{ ucwords($role->name) }}</option>
-                    @endforeach
-                </select>
-
-                <!-- Status Filter -->
-                <select wire:model.live="status" class="rounded-lg border border-gray-300 py-2.5 px-4 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-100 dark:border-gray-700 dark:bg-[#1C2434] dark:text-white/90">
-                    <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
-
-                <!-- Trash Toggle -->
-                <button 
-                    wire:click="$toggle('showDeleted')" 
-                    class="inline-flex items-center gap-2 rounded-lg py-2.5 px-4 text-sm font-medium transition-all {{ $showDeleted ? 'bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-500' : 'bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/90 hover:bg-gray-200 dark:hover:bg-white/10' }}"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                    </svg>
-                    {{ $showDeleted ? 'Hide Deleted' : 'Show Deleted' }}
-                </button>
             </div>
 
-            <!-- Add User Button -->
-            <a href="{{ route('admin.users.create') }}" wire:navigate>
-                <x-ui.button>
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4.5 w-4.5">
-                       <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                   </svg>
-                   Add New User
-                </x-ui.button>
-            </a>
+            <div class="flex items-center gap-3">
+                <!-- Filters Button -->
+                <button 
+                    x-on:click="$dispatch('open-drawer', 'user-filters')"
+                    class="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-300 active:scale-95 dark:border-gray-700 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                    </svg>
+                    Filters
+                    @if($role || $status || $showDeleted || $perPage != 10)
+                        <span class="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
+                            {{ ($role ? 1 : 0) + ($status ? 1 : 0) + ($showDeleted ? 1 : 0) + ($perPage != 10 ? 1 : 0) }}
+                        </span>
+                    @endif
+                </button>
+
+                <!-- Add User Button -->
+                <a href="{{ route('admin.users.create') }}" wire:navigate>
+                    <x-ui.button class="rounded-xl px-5 py-3 shadow-lg shadow-blue-500/20">
+                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="mr-2 h-5 w-5">
+                           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                       </svg>
+                       Add New User
+                    </x-ui.button>
+                </a>
+            </div>
         </div>
 
         <x-ui.table>
@@ -165,7 +157,7 @@
         </x-ui.table>
 
         <div class="px-5 py-4 border-t border-gray-100 dark:border-gray-800">
-            {{ $users->links() }}
+            {{ $users->onEachSide(1)->links(data: ['scrollTo' => false]) }}
         </div>
     </div>
 
@@ -189,4 +181,135 @@
             </div>
         </div>
     </x-ui.modal>
+    <!-- Filter Drawer -->
+    <x-ui.drawer name="user-filters" title="User Filters">
+        <div class="space-y-6">
+            <!-- Choose Field (Sorting) -->
+            <div>
+                <label for="filterField" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Sort By Field
+                </label>
+                <select 
+                    wire:model="sortField" 
+                    id="filterField" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="id">ID (Default)</option>
+                    <option value="first_name">Name</option>
+                    <option value="email">Email</option>
+                    <option value="status">Status</option>
+                </select>
+            </div>
+
+            <!-- Choose Order (Sorting) -->
+            <div>
+                <label for="filterFieldOrder" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Sort Direction
+                </label>
+                <select 
+                    wire:model="sortDirection" 
+                    id="filterFieldOrder" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
+
+            <!-- Records Per Page -->
+            <div>
+                <label for="perPage" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Records Per Page
+                </label>
+                <select 
+                    wire:model="perPage" 
+                    id="perPage" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+
+            <!-- Role Filter -->
+            <div>
+                <label for="role_filter" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    User Role
+                </label>
+                <select 
+                    wire:model="role" 
+                    id="role_filter" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="">All</option>
+                    @foreach($roles as $r)
+                        <option value="{{ $r->name }}">{{ ucwords($r->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div>
+                <label for="status_filter" class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">
+                    Account Status
+                </label>
+                <select 
+                    wire:model="status" 
+                    id="status_filter" 
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    <option value="">All</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <!-- Trash Toggle -->
+            <div 
+                x-data="{ localShowDeleted: @js($showDeleted) }"
+                class="rounded-xl border border-gray-100 bg-gray-50/50 p-4 dark:border-gray-800 dark:bg-white/5"
+            >
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-800 dark:text-white/90">Show Deleted</h4>
+                        <p class="text-xs text-gray-500">Include soft-deleted users in results</p>
+                    </div>
+                    <button 
+                        type="button"
+                        x-on:click="localShowDeleted = !localShowDeleted"
+                        @click="$dispatch('toggle-show-deleted')"
+                        class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+                        :class="localShowDeleted ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'"
+                    >
+                        <span 
+                            class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            :class="localShowDeleted ? 'translate-x-5' : 'translate-x-0'"
+                        ></span>
+                    </button>
+                    <input type="checkbox" wire:model="showDeleted" x-model="localShowDeleted" class="hidden">
+                </div>
+            </div>
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex items-center justify-between gap-3">
+                <button 
+                    wire:click="resetFilters" 
+                    x-on:click="close()"
+                    class="w-full rounded-xl border border-gray-200 bg-white py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-white/5 dark:text-white"
+                >
+                    Reset All
+                </button>
+                <button 
+                    wire:click="$refresh"
+                    x-on:click="close()" 
+                    class="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white hover:bg-blue-700 shadow-lg shadow-blue-500/30"
+                >
+                    Apply Filters
+                </button>
+            </div>
+        </x-slot>
+    </x-ui.drawer>
 </div>

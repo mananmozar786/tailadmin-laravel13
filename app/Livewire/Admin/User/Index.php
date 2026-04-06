@@ -3,71 +3,63 @@
 namespace App\Livewire\Admin\User;
 
 use App\Models\User;
+use App\Traits\WithDataTable;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithDataTable;
 
-    public $search = '';
-    public $role = '';
-    public $status = '';
-    public $showDeleted = false;
+    public string $role = '';
+    public string $status = '';
+    public bool $showDeleted = false;
 
     public $userIdBeingDeleted = null;
 
-    public $sortField = 'id';
-    public $sortDirection = 'desc';
+    /**
+     * Define the query string configuration.
+     */
+    protected function queryString(): array
+    {
+        return array_merge($this->queryStringWithDataTable(), [
+            'role' => ['except' => ''],
+            'status' => ['except' => ''],
+            'showDeleted' => ['except' => false],
+        ]);
+    }
 
-    protected $queryString = [
-        'search' => ['except' => ''],
-        'role' => ['except' => ''],
-        'status' => ['except' => ''],
-        'showDeleted' => ['except' => false],
-        'sortField' => ['except' => 'id'],
-        'sortDirection' => ['except' => 'desc'],
-    ];
-
-    public function updatedSearch()
+    public function updatedRole(): void
     {
         $this->resetPage();
     }
 
-    public function updatedRole()
+    public function updatedStatus(): void
     {
         $this->resetPage();
     }
 
-    public function updatedStatus()
+    public function updatedShowDeleted(): void
     {
         $this->resetPage();
     }
 
-    public function updatedShowDeleted()
+    /**
+     * Reset custom filters for this component.
+     */
+    public function resetCustomFilters(): void
     {
-        $this->resetPage();
+        $this->reset(['role', 'status', 'showDeleted']);
     }
 
-    public function sortBy($field)
-    {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortField = $field;
-            $this->sortDirection = 'asc';
-        }
-    }
-
-    public function confirmDeletion($id)
+    public function confirmDeletion($id): void
     {
         $this->userIdBeingDeleted = $id;
         $this->dispatch('open-modal', 'confirm-user-deletion');
     }
 
-    public function delete()
+    public function delete(): void
     {
         $user = User::withTrashed()->findOrFail($this->userIdBeingDeleted);
 
@@ -83,7 +75,7 @@ class Index extends Component
         $this->dispatch('close-modal', 'confirm-user-deletion');
     }
 
-    public function restore($id)
+    public function restore($id): void
     {
         $user = User::onlyTrashed()->findOrFail($id);
         $user->restore();
@@ -93,30 +85,22 @@ class Index extends Component
     #[Layout('layouts.app')]
     public function render()
     {
-        $query = User::query();
-
-        if ($this->showDeleted) {
-            $query->onlyTrashed();
-        }
-
-        $query->when($this->search, function ($q) {
-            $q->where(function ($query) {
-                $query->where('first_name', 'like', '%' . $this->search . '%')
-                    ->orWhere('last_name', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%');
-            });
-        });
-
-        if ($this->role) {
-            $query->role($this->role);
-        }
-
-        if ($this->status) {
-            $query->where('status', $this->status);
-        }
+        $users = User::query()
+            ->when($this->showDeleted, fn($q) => $q->onlyTrashed())
+            ->when($this->search, function ($q) {
+                $q->where(function ($query) {
+                    $query->where('first_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('last_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->when($this->role, fn($q) => $q->role($this->role))
+            ->when($this->status, fn($q) => $q->where('status', $this->status))
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->paginate($this->perPage);
 
         return view('livewire.admin.user.index', [
-            'users' => $query->orderBy($this->sortField, $this->sortDirection)->paginate(10),
+            'users' => $users,
             'roles' => Role::all(),
         ]);
     }
