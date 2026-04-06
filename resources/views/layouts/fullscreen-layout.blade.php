@@ -33,13 +33,10 @@
                 },
                 updateTheme() {
                     const html = document.documentElement;
-                    const body = document.body;
                     if (this.theme === 'dark') {
                         html.classList.add('dark');
-                        body.classList.add('dark', 'bg-gray-900');
                     } else {
                         html.classList.remove('dark');
-                        body.classList.remove('dark', 'bg-gray-900');
                     }
                 }
             });
@@ -83,13 +80,13 @@
             const theme = savedTheme || systemTheme;
             if (theme === 'dark') {
                 document.documentElement.classList.add('dark');
-                document.body.classList.add('dark', 'bg-gray-900');
             } else {
                 document.documentElement.classList.remove('dark');
-                document.body.classList.remove('dark', 'bg-gray-900');
             }
         })();
     </script>
+
+    @livewireStyles
 </head>
 
 <body x-data="{ 'loaded': true}" x-init="$store.sidebar.isExpanded = window.innerWidth >= 1280;
@@ -110,6 +107,7 @@ window.addEventListener('resize', checkMobile);">
 
     @yield('content')
 
+    @livewireScripts
 </body>
 
 @stack('scripts')
