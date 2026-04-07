@@ -223,6 +223,109 @@
                     }
                 }
             }
+        },
+        "/api/v1/cities": {
+            "get": {
+                "tags": [
+                    "Locations"
+                ],
+                "summary": "Display a listing of active cities",
+                "operationId": "7b4f74d297f7d14265223e7cdedd65c6",
+                "parameters": [
+                    {
+                        "name": "state_id",
+                        "in": "query",
+                        "description": "Filter by state ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of cities",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/countries": {
+            "get": {
+                "tags": [
+                    "Locations"
+                ],
+                "summary": "Display a listing of active countries",
+                "operationId": "e9e2a36340d4688ab3f673d9e754a0ce",
+                "responses": {
+                    "200": {
+                        "description": "List of countries",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/states": {
+            "get": {
+                "tags": [
+                    "Locations"
+                ],
+                "summary": "Display a listing of active states",
+                "operationId": "f8176c20f24890ecdfad325d41b8439e",
+                "parameters": [
+                    {
+                        "name": "country_id",
+                        "in": "query",
+                        "description": "Filter by country ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of states",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -242,6 +345,10 @@
         {
             "name": "Categories",
             "description": "Categories"
+        },
+        {
+            "name": "Locations",
+            "description": "Locations"
         }
     ]
 }

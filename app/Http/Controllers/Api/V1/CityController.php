@@ -7,11 +7,41 @@ use App\Http\Resources\CityResource;
 use App\Models\City;
 use Illuminate\Http\Request;
 
+use OpenApi\Attributes as OA;
+
 class CityController extends Controller
 {
-    /**
-     * Display a listing of active cities, optionally filtered by state or country.
-     */
+    #[OA\Get(
+        path: "/api/v1/cities",
+        summary: "Display a listing of active cities",
+        tags: ["Locations"],
+        parameters: [
+            new OA\Parameter(
+                name: "state_id",
+                in: "query",
+                description: "Filter by state ID",
+                required: false,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "country_id",
+                in: "query",
+                description: "Filter by country ID",
+                required: false,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "List of cities",
+                content: new OA\JsonContent(
+                    type: "array",
+                    items: new OA\Items(type: "object")
+                )
+            )
+        ]
+    )]
     public function index(Request $request)
     {
         $query = City::active();
