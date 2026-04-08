@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CountryController;
 use App\Http\Controllers\Api\V1\StateController;
 use App\Http\Controllers\Api\V1\CityController;
+use App\Http\Controllers\Api\V1\HealthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,11 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/profile', [AuthController::class, 'profile']);
         });
+    });
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/health/bmi', [HealthController::class, 'storeBmi']);
+        Route::patch('/health/profile', [HealthController::class, 'updateProfile']);
     });
 
     Route::get('/countries', [CountryController::class, 'index']);

@@ -38,6 +38,11 @@ class User extends Authenticatable
         'phone',
         'zipcode',
         'status',
+        'height',
+        'weight',
+        'bmi',
+        'bmi_status',
+        'age',
     ];
 
     /**
