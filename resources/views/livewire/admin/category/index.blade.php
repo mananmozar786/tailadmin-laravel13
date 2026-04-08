@@ -31,7 +31,7 @@
                     <input 
                         wire:model.live.debounce.500ms="search" 
                         type="text" 
-                        placeholder="Search by name or slug..." 
+                        placeholder="Search by title, subtitle or slug..." 
                         class="pl-11 w-full rounded-xl border border-gray-200 bg-gray-50/50 py-3 text-sm transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-white/5 dark:text-white/90 dark:focus:border-blue-500"
                     />
                 </div>
@@ -68,7 +68,8 @@
 
         <x-ui.table>
             <x-slot name="thead">
-                <x-ui.table-header label="Category" field="name" :sortField="$sortField" :sortDirection="$sortDirection" />
+                <x-ui.table-header label="Category" field="title" :sortField="$sortField" :sortDirection="$sortDirection" />
+                <x-ui.table-header label="Subtitle" field="subtitle" :sortField="$sortField" :sortDirection="$sortDirection" />
                 <x-ui.table-header label="Slug" field="slug" :sortField="$sortField" :sortDirection="$sortDirection" />
                 <x-ui.table-header label="Status" field="status" :sortField="$sortField" :sortDirection="$sortDirection" />
                 <x-ui.table-header label="Actions" />
@@ -79,10 +80,13 @@
                     <td class="px-5 py-4">
                         <div class="flex flex-col">
                             <h4 class="font-semibold text-gray-800 dark:text-white/90">
-                                {{ $category->name }}
+                                {{ $category->title }}
                             </h4>
                             <span class="text-xs text-gray-500 dark:text-gray-400">ID: #{{ $category->id }}</span>
                         </div>
+                    </td>
+                    <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">
+                        {{ $category->subtitle ?: 'N/A' }}
                     </td>
                     <td class="px-5 py-4 text-sm text-gray-600 dark:text-gray-400">{{ $category->slug }}</td>
                     <td class="px-5 py-4">
@@ -128,7 +132,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="px-5 py-10 text-center">No categories found</td>
+                    <td colspan="5" class="px-5 py-10 text-center">No categories found</td>
                 </tr>
             @endforelse
         </x-ui.table>
@@ -173,7 +177,8 @@
                     class="w-full rounded-lg border border-gray-200 bg-gray-50 p-2.5 text-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-white/5 dark:text-white"
                 >
                     <option value="id">ID (Default)</option>
-                    <option value="name">Name</option>
+                    <option value="title">Title</option>
+                    <option value="subtitle">Subtitle</option>
                     <option value="slug">Slug</option>
                     <option value="status">Status</option>
                 </select>

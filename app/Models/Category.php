@@ -16,8 +16,9 @@ class Category extends Model
     use HasFactory, SoftDeletes, HasStatus;
 
     protected $fillable = [
-        'name',
+        'title',
         'slug',
+        'subtitle',
         'status',
     ];
 
@@ -28,7 +29,7 @@ class Category extends Model
     {
         static::saving(function (Category $category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slug($category->name);
+                $category->slug = Str::slug($category->title);
             }
         });
     }

@@ -21,7 +21,16 @@ class CategoryController extends Controller
                 description: "Successful operation",
                 content: new OA\JsonContent(
                     type: "array",
-                    items: new OA\Items(type: "object")
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: "id", type: "integer", example: 1),
+                            new OA\Property(property: "title", type: "string", example: "Electronics"),
+                            new OA\Property(property: "slug", type: "string", example: "electronics"),
+                            new OA\Property(property: "subtitle", type: "string", example: "Gadgets and more"),
+                            new OA\Property(property: "status", type: "string", example: "active")
+                        ],
+                        type: "object"
+                    )
                 )
             )
         ]

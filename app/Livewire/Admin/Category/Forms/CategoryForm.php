@@ -10,25 +10,28 @@ class CategoryForm extends Form
 {
     public ?Category $category = null;
 
-    public $name = '';
+    public $title = '';
+    public $subtitle = '';
     public $status = 'active';
 
     public function setCategory(Category $category)
     {
         $this->category = $category;
-        $this->name = $category->name;
+        $this->title = $category->title;
+        $this->subtitle = $category->subtitle;
         $this->status = $category->status;
     }
 
     public function rules()
     {
         return [
-            'name' => [
+            'title' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('categories', 'name')->ignore($this->category?->id),
+                Rule::unique('categories', 'title')->ignore($this->category?->id),
             ],
+            'subtitle' => 'nullable|string|max:255',
             'status' => 'required|in:active,inactive',
         ];
     }

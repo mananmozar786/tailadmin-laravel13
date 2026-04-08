@@ -215,6 +215,28 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Electronics"
+                                            },
+                                            "slug": {
+                                                "type": "string",
+                                                "example": "electronics"
+                                            },
+                                            "subtitle": {
+                                                "type": "string",
+                                                "example": "Gadgets and more"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "active"
+                                            }
+                                        },
                                         "type": "object"
                                     }
                                 }

@@ -74,12 +74,13 @@ class Index extends Component
             ->when($this->showDeleted, fn($q) => $q->onlyTrashed())
             ->when($this->search, function ($q) {
                 $q->where(function ($query) {
-                    $query->where('name', 'like', '%' . $this->search . '%')
+                    $query->where('title', 'like', '%' . $this->search . '%')
+                        ->orWhere('subtitle', 'like', '%' . $this->search . '%')
                         ->orWhere('slug', 'like', '%' . $this->search . '%');
                 });
             })
             ->when($this->status, fn($q) => $q->where('status', $this->status))
-            ->orderBy($this->sortField, $this->sortDirection)
+            ->orderBy($this->sortField === 'name' ? 'title' : $this->sortField, $this->sortDirection)
             ->paginate($this->perPage);
 
         return view('livewire.admin.category.index', [

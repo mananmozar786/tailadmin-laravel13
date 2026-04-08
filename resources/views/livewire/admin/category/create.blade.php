@@ -5,9 +5,14 @@
         <form wire:submit="save" class="space-y-4">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                    <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">Name <span class="text-red-500">*</span></label>
-                    <input type="text" wire:model="form.name" class="w-full rounded-lg border border-gray-200 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-white/5 dark:text-white">
-                    @error('form.name') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">Title <span class="text-red-500">*</span></label>
+                    <input type="text" wire:model="form.title" class="w-full rounded-lg border border-gray-200 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-white/5 dark:text-white">
+                    @error('form.title') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">Subtitle</label>
+                    <input type="text" wire:model="form.subtitle" class="w-full rounded-lg border border-gray-200 p-2.5 text-sm transition-all focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 dark:border-gray-700 dark:bg-white/5 dark:text-white">
+                    @error('form.subtitle') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-white/90">Status <span class="text-red-500">*</span></label>
